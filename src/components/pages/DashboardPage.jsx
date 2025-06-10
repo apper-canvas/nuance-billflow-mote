@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import MainFeature from '../components/MainFeature';
+import DashboardOverview from '@/components/organisms/DashboardOverview';
 
-const Dashboard = () => {
+const DashboardPage = () => {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -14,9 +14,9 @@ const Dashboard = () => {
         <p className="text-surface-600 mt-1">Overview of your billing operations</p>
       </div>
       
-      <MainFeature />
+      <DashboardOverview />
     </motion.div>
   );
 };
 
-export default Dashboard;
+export default DashboardPage;

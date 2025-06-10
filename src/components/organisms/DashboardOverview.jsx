@@ -1,94 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
-import ApperIcon from './ApperIcon';
-import { customerService, productService, subscriptionService, invoiceService } from '../services';
+import { motion } from 'framer-motion';
+import MetricCard from '@/components/molecules/MetricCard';
+import QuickActionCard from '@/components/molecules/QuickActionCard';
+import RecentActivityList from '@/components/organisms/RecentActivityList';
+import { customerService, subscriptionService, invoiceService } from '@/services';
 
-const MetricCard = ({ title, value, icon, trend, color = "primary" }) => (
-  <motion.div
-    whileHover={{ scale: 1.02 }}
-    className="bg-white rounded-lg p-6 shadow-sm border border-surface-200"
-  >
-    <div className="flex items-center justify-between">
-      <div>
-        <p className="text-sm font-medium text-surface-600">{title}</p>
-        <p className="text-2xl font-bold text-surface-900 mt-1">{value}</p>
-        {trend && (
-          <div className="flex items-center mt-2">
-            <ApperIcon 
-              name={trend > 0 ? "TrendingUp" : "TrendingDown"} 
-              size={16} 
-              className={trend > 0 ? "text-accent mr-1" : "text-red-500 mr-1"} 
-            />
-            <span className={`text-sm ${trend > 0 ? "text-accent" : "text-red-500"}`}>
-              {Math.abs(trend)}%
-            </span>
-          </div>
-        )}
-      </div>
-      <div className={`w-12 h-12 bg-${color} bg-opacity-10 rounded-lg flex items-center justify-center`}>
-        <ApperIcon name={icon} size={24} className={`text-${color}`} />
-      </div>
-    </div>
-  </motion.div>
-);
-
-const QuickAction = ({ title, description, icon, onClick, color = "primary" }) => (
-  <motion.button
-    whileHover={{ scale: 1.02 }}
-    whileTap={{ scale: 0.98 }}
-    onClick={onClick}
-    className="bg-white rounded-lg p-4 shadow-sm border border-surface-200 text-left w-full hover:shadow-md transition-shadow"
-  >
-    <div className="flex items-start">
-      <div className={`w-10 h-10 bg-${color} bg-opacity-10 rounded-lg flex items-center justify-center mr-3`}>
-        <ApperIcon name={icon} size={20} className={`text-${color}`} />
-      </div>
-      <div>
-        <h3 className="font-medium text-surface-900">{title}</h3>
-        <p className="text-sm text-surface-600 mt-1">{description}</p>
-      </div>
-    </div>
-  </motion.button>
-);
-
-const RecentActivity = ({ activities }) => (
-  <div className="bg-white rounded-lg shadow-sm border border-surface-200">
-    <div className="p-6 border-b border-surface-200">
-      <h3 className="text-lg font-semibold text-surface-900">Recent Activity</h3>
-    </div>
-    <div className="p-6">
-      {activities.length === 0 ? (
-        <div className="text-center py-8">
-          <ApperIcon name="Activity" size={48} className="text-surface-300 mx-auto mb-4" />
-          <p className="text-surface-500">No recent activity</p>
-        </div>
-      ) : (
-        <div className="space-y-4">
-          {activities.map((activity, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="flex items-center"
-            >
-              <div className={`w-8 h-8 bg-${activity.color} bg-opacity-10 rounded-full flex items-center justify-center mr-3`}>
-                <ApperIcon name={activity.icon} size={16} className={`text-${activity.color}`} />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm text-surface-900 break-words">{activity.message}</p>
-                <p className="text-xs text-surface-500">{activity.time}</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      )}
-    </div>
-  </div>
-);
-
-const MainFeature = () => {
+const DashboardOverview = () => {
   const [metrics, setMetrics] = useState({
     mrr: 0,
     activeSubscriptions: 0,
@@ -216,28 +134,28 @@ const MainFeature = () => {
           title="Monthly Recurring Revenue"
           value={`$${metrics.mrr.toLocaleString()}`}
           icon="DollarSign"
-          trend={12.5}
+          change={12.5}
           color="accent"
         />
         <MetricCard
           title="Active Subscriptions"
           value={metrics.activeSubscriptions}
           icon="Repeat"
-          trend={8.2}
+          change={8.2}
           color="primary"
         />
         <MetricCard
           title="Pending Payments"
           value={`$${metrics.pendingPayments.toLocaleString()}`}
           icon="Clock"
-          trend={-2.1}
+          change={-2.1}
           color="secondary"
         />
         <MetricCard
           title="Total Customers"
           value={metrics.totalCustomers}
           icon="Users"
-          trend={15.3}
+          change={15.3}
           color="primary"
         />
       </div>
@@ -258,7 +176,7 @@ const MainFeature = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
                   >
-                    <QuickAction {...action} />
+                    <QuickActionCard {...action} />
                   </motion.div>
                 ))}
               </div>
@@ -267,11 +185,11 @@ const MainFeature = () => {
         </div>
         
         <div>
-          <RecentActivity activities={activities} />
+          <RecentActivityList activities={activities} />
         </div>
       </div>
     </div>
   );
 };
 
-export default MainFeature;
+export default DashboardOverview;

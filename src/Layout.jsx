@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import ApperIcon from '@/components/ApperIcon';
 import { Outlet, NavLink, useLocation } from 'react-router-dom';
-import { routeArray } from './config/routes';
-import ApperIcon from './components/ApperIcon';
+import { routeArray } from '@/config/routes';
 
 const Layout = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -22,13 +22,12 @@ const Layout = () => {
               <ApperIcon name="Menu" size={24} />
             </button>
             <div className="flex items-center ml-2 lg:ml-0">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+<div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                 <ApperIcon name="DollarSign" className="text-white" size={20} />
               </div>
-              <h1 className="ml-3 text-xl font-bold text-surface-900">BillFlow Pro</h1>
+              <h1 className="ml-3 text-lg font-bold text-surface-900">BillFlow Pro</h1>
             </div>
           </div>
-          
           <div className="flex items-center space-x-4">
             <div className="relative">
               <input
@@ -43,13 +42,13 @@ const Layout = () => {
             </button>
           </div>
         </div>
-      </header>
+</header>
 
       <div className="flex-1 flex overflow-hidden">
         {/* Desktop Sidebar */}
-        <aside className="hidden lg:flex lg:flex-shrink-0 lg:w-60 bg-white border-r border-surface-200 z-40">
-          <div className="flex flex-col w-full overflow-y-auto">
-            <nav className="flex-1 px-4 py-6 space-y-1">
+        <aside className="hidden lg:flex flex-col w-64 bg-white border-r border-surface-200">
+          <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
+            <nav className="mt-5 flex-1 px-3 space-y-1">
               {navigationItems.map((item) => (
                 <NavLink
                   key={item.id}
@@ -78,7 +77,7 @@ const Layout = () => {
               onClick={() => setIsMobileMenuOpen(false)}
             />
             <div className="lg:hidden fixed inset-y-0 left-0 w-64 bg-white border-r border-surface-200 z-50">
-              <div className="flex flex-col h-full">
+<div className="flex flex-col h-full">
                 <div className="flex items-center justify-between h-16 px-4 border-b border-surface-200">
                   <div className="flex items-center">
                     <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">

@@ -1,13 +1,13 @@
-import Home from '../pages/Home';
-import Dashboard from '../pages/Dashboard';
-import Customers from '../pages/Customers';
-import Products from '../pages/Products';
-import Subscriptions from '../pages/Subscriptions';
-import Invoices from '../pages/Invoices';
-import Payments from '../pages/Payments';
-import Reports from '../pages/Reports';
-import Settings from '../pages/Settings';
-import NotFound from '../pages/NotFound';
+import HomePage from '@/components/pages/HomePage';
+import DashboardPage from '@/components/pages/DashboardPage';
+import CustomersPage from '@/components/pages/CustomersPage';
+import ProductsPage from '@/components/pages/ProductsPage';
+import SubscriptionsPage from '@/components/pages/SubscriptionsPage';
+import InvoicesPage from '@/components/pages/InvoicesPage';
+import PaymentsPage from '@/components/pages/PaymentsPage';
+import ReportsPage from '@/components/pages/ReportsPage';
+import SettingsPage from '@/components/pages/SettingsPage';
+import NotFoundPage from '@/components/pages/NotFoundPage';
 
 export const routes = {
   home: {
@@ -15,63 +15,63 @@ export const routes = {
     label: 'Home',
     path: '/home',
     icon: 'Home',
-    component: Home
+component: HomePage
   },
   dashboard: {
     id: 'dashboard',
     label: 'Dashboard',
     path: '/dashboard',
     icon: 'LayoutDashboard',
-    component: Dashboard
+component: DashboardPage
   },
   customers: {
     id: 'customers',
     label: 'Customers',
     path: '/customers',
     icon: 'Users',
-    component: Customers
+component: CustomersPage
   },
   products: {
     id: 'products',
     label: 'Products',
     path: '/products',
     icon: 'Package',
-    component: Products
+component: ProductsPage
   },
   subscriptions: {
     id: 'subscriptions',
     label: 'Subscriptions',
     path: '/subscriptions',
     icon: 'Repeat',
-    component: Subscriptions
+component: SubscriptionsPage
   },
   invoices: {
     id: 'invoices',
     label: 'Invoices',
     path: '/invoices',
     icon: 'FileText',
-    component: Invoices
+component: InvoicesPage
   },
   payments: {
     id: 'payments',
     label: 'Payments',
     path: '/payments',
     icon: 'CreditCard',
-    component: Payments
+component: PaymentsPage
   },
   reports: {
     id: 'reports',
     label: 'Reports',
     path: '/reports',
     icon: 'BarChart3',
-    component: Reports
+component: ReportsPage
   },
   settings: {
     id: 'settings',
     label: 'Settings',
     path: '/settings',
     icon: 'Settings',
-    component: Settings
+component: SettingsPage
   }
 };
 

@@ -1,77 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
-import ApperIcon from '../components/ApperIcon';
-import { customerService, subscriptionService, invoiceService, paymentService } from '../services';
+import ApperIcon from '@/components/ApperIcon';
+import MetricCard from '@/components/molecules/MetricCard';
+import ReportTable from '@/components/molecules/ReportTable';
+import { customerService, subscriptionService, invoiceService, paymentService } from '@/services';
 
-const MetricCard = ({ title, value, icon, change, color = "primary" }) => (
-  <motion.div
-    whileHover={{ scale: 1.02 }}
-    className="bg-white rounded-lg p-6 shadow-sm border border-surface-200"
-  >
-    <div className="flex items-center justify-between">
-      <div>
-        <p className="text-sm font-medium text-surface-600">{title}</p>
-        <p className="text-2xl font-bold text-surface-900 mt-1">{value}</p>
-        {change && (
-          <div className="flex items-center mt-2">
-            <ApperIcon 
-              name={change > 0 ? "TrendingUp" : "TrendingDown"} 
-              size={16} 
-              className={change > 0 ? "text-accent mr-1" : "text-red-500 mr-1"} 
-            />
-            <span className={`text-sm ${change > 0 ? "text-accent" : "text-red-500"}`}>
-              {Math.abs(change)}% vs last month
-            </span>
-          </div>
-        )}
-      </div>
-      <div className={`w-12 h-12 bg-${color} bg-opacity-10 rounded-lg flex items-center justify-center`}>
-        <ApperIcon name={icon} size={24} className={`text-${color}`} />
-      </div>
-    </div>
-  </motion.div>
-);
-
-const ReportTable = ({ title, data, columns }) => (
-  <div className="bg-white rounded-lg shadow-sm border border-surface-200">
-    <div className="p-6 border-b border-surface-200">
-      <h3 className="text-lg font-semibold text-surface-900">{title}</h3>
-    </div>
-    <div className="overflow-x-auto">
-      {data.length === 0 ? (
-        <div className="p-8 text-center">
-          <p className="text-surface-500">No data available</p>
-        </div>
-      ) : (
-        <table className="w-full">
-          <thead className="bg-surface-50">
-            <tr>
-              {columns.map((column, index) => (
-                <th key={index} className="px-6 py-3 text-left text-xs font-medium text-surface-500 uppercase tracking-wider">
-                  {column.header}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-surface-200">
-            {data.map((row, index) => (
-              <tr key={index} className="hover:bg-surface-50">
-                {columns.map((column, colIndex) => (
-                  <td key={colIndex} className="px-6 py-4 text-sm">
-                    {column.render ? column.render(row[column.key], row) : row[column.key]}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-    </div>
-  </div>
-);
-
-const Reports = () => {
+const ReportsOverview = () => {
   const [reportData, setReportData] = useState({
     revenue: 0,
     customers: 0,
@@ -217,53 +152,37 @@ const Reports = () => {
 
   if (loading) {
     return (
-      <div className="p-6">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-surface-900">Reports</h1>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {[...Array(6)].map((_, i) => (
-            <div key={i} className="bg-white rounded-lg p-6 shadow-sm border border-surface-200">
-              <div className="animate-pulse space-y-3">
-                <div className="h-4 bg-surface-200 rounded w-3/4"></div>
-                <div className="h-8 bg-surface-200 rounded w-1/2"></div>
-              </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        {[...Array(6)].map((_, i) => (
+          <div key={i} className="bg-white rounded-lg p-6 shadow-sm border border-surface-200">
+            <div className="animate-pulse space-y-3">
+              <div className="h-4 bg-surface-200 rounded w-3/4"></div>
+              <div className="h-8 bg-surface-200 rounded w-1/2"></div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="p-6">
-        <div className="text-center py-12">
-          <ApperIcon name="AlertCircle" size={48} className="text-red-500 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-surface-900 mb-2">Error Loading Reports</h3>
-          <p className="text-surface-600 mb-4">{error}</p>
-          <button
-            onClick={loadReportData}
-            className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
-          >
-            Try Again
-          </button>
-        </div>
+      <div className="text-center py-12">
+        <ApperIcon name="AlertCircle" size={48} className="text-red-500 mx-auto mb-4" />
+        <h3 className="text-lg font-medium text-surface-900 mb-2">Error Loading Reports</h3>
+        <p className="text-surface-600 mb-4">{error}</p>
+        <Button
+          onClick={loadReportData}
+          className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
+        >
+          Try Again
+        </Button>
       </div>
     );
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="p-6 max-w-full overflow-hidden"
-    >
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-surface-900">Reports</h1>
-        <p className="text-surface-600 mt-1">Financial insights and business metrics</p>
-      </div>
-
+    <>
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         <MetricCard
@@ -331,8 +250,8 @@ const Reports = () => {
           columns={invoiceColumns}
         />
       </div>
-    </motion.div>
+    </>
   );
 };
 
-export default Reports;
+export default ReportsOverview;

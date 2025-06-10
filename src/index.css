@@ -31,6 +31,39 @@ body {
     scrollbar-width: none;
   }
   .scrollbar-hide::-webkit-scrollbar {
-    display: none;
+display: none;
   }
+}
+
+/* Stripe Elements Styling */
+.StripeElement {
+  box-sizing: border-box;
+  height: 40px;
+  padding: 10px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  transition: box-shadow 150ms ease;
+}
+
+.StripeElement--focus {
+  border-color: #4F46E5;
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+  outline: none;
+}
+
+.StripeElement--invalid {
+  border-color: #ef4444;
+}
+
+.StripeElement--webkit-autofill {
+  background-color: #fefefe !important;
+}
+
+.stripe-error {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
 }

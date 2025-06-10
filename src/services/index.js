@@ -1,5 +1,15 @@
-export { default as customerService } from './api/customerService';
-export { default as productService } from './api/productService';
-export { default as subscriptionService } from './api/subscriptionService';
-export { default as invoiceService } from './api/invoiceService';
-export { default as paymentService } from './api/paymentService';
+import customerService from './api/customerService';
+import productService from './api/productService';
+import subscriptionService from './api/subscriptionService';
+import invoiceService from './api/invoiceService';
+import paymentService from './api/paymentService';
+import stripeService from './api/stripeService';
+
+export {
+  customerService,
+  productService,
+  subscriptionService,
+  invoiceService,
+  paymentService,
+  stripeService
+};

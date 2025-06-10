@@ -163,13 +163,13 @@ const PaymentsPage = () => {
             onChange={(e) => setMethodFilter(e.target.value)}
             className="px-3 py-2 border border-surface-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
           >
-            <option value="all">All Methods</option>
+<option value="all">All Methods</option>
             <option value="credit_card">Credit Card</option>
             <option value="bank_transfer">Bank Transfer</option>
             <option value="check">Check</option>
             <option value="cash">Cash</option>
             <option value="paypal">PayPal</option>
-            <option value="stripe">Stripe</option>
+            <option value="stripe">🔒 Stripe</option>
           </Select>
         </div>
       </div>

@@ -15,63 +15,63 @@ export const routes = {
     label: 'Home',
     path: '/home',
     icon: 'Home',
-component: HomePage
+    component: HomePage
   },
   dashboard: {
     id: 'dashboard',
     label: 'Dashboard',
     path: '/dashboard',
     icon: 'LayoutDashboard',
-component: DashboardPage
+    component: DashboardPage
   },
   customers: {
     id: 'customers',
     label: 'Customers',
     path: '/customers',
     icon: 'Users',
-component: CustomersPage
+    component: CustomersPage
   },
   products: {
     id: 'products',
     label: 'Products',
     path: '/products',
     icon: 'Package',
-component: ProductsPage
+    component: ProductsPage
   },
   subscriptions: {
     id: 'subscriptions',
     label: 'Subscriptions',
     path: '/subscriptions',
     icon: 'Repeat',
-component: SubscriptionsPage
+    component: SubscriptionsPage
   },
   invoices: {
     id: 'invoices',
     label: 'Invoices',
     path: '/invoices',
     icon: 'FileText',
-component: InvoicesPage
+    component: InvoicesPage
   },
   payments: {
     id: 'payments',
     label: 'Payments',
     path: '/payments',
     icon: 'CreditCard',
-component: PaymentsPage
+    component: PaymentsPage
   },
   reports: {
     id: 'reports',
     label: 'Reports',
     path: '/reports',
     icon: 'BarChart3',
-component: ReportsPage
+    component: ReportsPage
   },
   settings: {
     id: 'settings',
     label: 'Settings',
     path: '/settings',
     icon: 'Settings',
-component: SettingsPage
+    component: SettingsPage
   }
 };
 

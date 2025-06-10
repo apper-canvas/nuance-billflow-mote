@@ -2,15 +2,18 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 const Button = ({ children, className = '', type = 'button', onClick, whileHover, whileTap, ...rest }) => {
-  const Component = whileHover || whileTap ? motion.button : 'button';
-
+  const hasMotion = whileHover || whileTap;
+  const Component = hasMotion ? motion.button : 'button';
+  
+  // Filter out motion-specific props for regular button elements
+  const motionProps = hasMotion ? { whileHover, whileTap } : {};
+  
   return (
     <Component
       type={type}
       onClick={onClick}
       className={`${className}`}
-      whileHover={whileHover}
-      whileTap={whileTap}
+      {...motionProps}
       {...rest}
     >
       {children}

@@ -144,11 +144,44 @@ return { success: true };
     }
   },
 
-  async getStripePayments() {
+async getStripePayments() {
     await delay(300);
     const stripePayments = payments.filter(p => p.method === 'stripe');
     return [...stripePayments];
+  },
+
+  // PayPal integration methods
+  async processPayPalPayment(paymentData) {
+    await delay(1000);
+    
+    try {
+      // Create payment record for PayPal
+      const newPayment = {
+        ...paymentData,
+        id: Date.now().toString(),
+        status: 'completed',
+        reference: `paypal_${paymentData.paypalOrderId}`,
+        createdAt: new Date().toISOString()
+      };
+
+      payments.push(newPayment);
+
+      return {
+        success: true,
+        payment: newPayment
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message || 'PayPal payment processing failed'
+      };
+    }
+  },
+
+  async getPayPalPayments() {
+    await delay(300);
+    const paypalPayments = payments.filter(p => p.method === 'paypal');
+    return [...paypalPayments];
   }
 };
-
 export default paymentService;

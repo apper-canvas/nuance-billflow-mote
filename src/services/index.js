@@ -1,15 +1,17 @@
 import customerService from './api/customerService';
-import productService from './api/productService';
-import subscriptionService from './api/subscriptionService';
 import invoiceService from './api/invoiceService';
 import paymentService from './api/paymentService';
+import productService from './api/productService';
+import subscriptionService from './api/subscriptionService';
 import stripeService from './api/stripeService';
+import paypalService from './api/paypalService';
 
 export {
   customerService,
-  productService,
-  subscriptionService,
   invoiceService,
   paymentService,
-  stripeService
+  productService,
+subscriptionService,
+  stripeService,
+  paypalService
 };

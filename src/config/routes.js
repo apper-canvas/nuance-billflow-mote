@@ -1,14 +1,15 @@
 import HomePage from '@/components/pages/HomePage';
 import DashboardPage from '@/components/pages/DashboardPage';
 import CustomersPage from '@/components/pages/CustomersPage';
-import ProductsPage from '@/components/pages/ProductsPage';
-import SubscriptionsPage from '@/components/pages/SubscriptionsPage';
 import InvoicesPage from '@/components/pages/InvoicesPage';
 import PaymentsPage from '@/components/pages/PaymentsPage';
+import ProductsPage from '@/components/pages/ProductsPage';
+import SubscriptionsPage from '@/components/pages/SubscriptionsPage';
 import ReportsPage from '@/components/pages/ReportsPage';
 import SettingsPage from '@/components/pages/SettingsPage';
+import PayPalSuccessPage from '@/components/pages/PayPalSuccessPage';
+import PayPalErrorPage from '@/components/pages/PayPalErrorPage';
 import NotFoundPage from '@/components/pages/NotFoundPage';
-
 export const routes = {
   home: {
     id: 'home',
@@ -17,11 +18,11 @@ export const routes = {
     icon: 'Home',
     component: HomePage
   },
-  dashboard: {
+dashboard: {
     id: 'dashboard',
     label: 'Dashboard',
     path: '/dashboard',
-    icon: 'LayoutDashboard',
+    icon: 'BarChart3',
     component: DashboardPage
   },
   customers: {
@@ -76,3 +77,9 @@ export const routes = {
 };
 
 export const routeArray = Object.values(routes);
+
+export const additionalRoutes = [
+  { path: '/paypal/success', component: PayPalSuccessPage, title: 'Payment Successful' },
+  { path: '/paypal/error', component: PayPalErrorPage, title: 'Payment Failed' },
+  { path: '*', component: NotFoundPage, title: 'Page Not Found' }
+];

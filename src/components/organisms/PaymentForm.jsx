@@ -4,13 +4,22 @@ import { toast } from 'react-toastify';
 import { format } from 'date-fns';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
 import FormField from '@/components/molecules/FormField';
 import Button from '@/components/atoms/Button';
 import ApperIcon from '@/components/ApperIcon';
 import { paymentService, invoiceService } from '@/services';
+import paypalService from '@/services/api/paypalService';
 
 // Initialize Stripe (in production, this should come from environment variables)
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || 'pk_test_stripe_key_placeholder');
+
+// PayPal configuration
+const paypalOptions = {
+  "client-id": import.meta.env.VITE_PAYPAL_CLIENT_ID || 'AQlMhQ7Dw7hL8Z2XMqU5v-VHVUGPvQ8rK5X8GJ9Q8tJ8vJ8tJ8vJ8tJ8vJ8tJ8vJ8t',
+  currency: 'USD',
+  intent: 'capture'
+};
 
 const CARD_OPTIONS = {
   style: {
@@ -174,6 +183,130 @@ const StripeCheckoutForm = ({ formData, selectedInvoice, onPaymentSuccess, onCan
     </form>
   );
 };
+
+const PayPalCheckoutForm = ({ formData, selectedInvoice, onPaymentSuccess, onCancel, payment }) => {
+  const [processing, setProcessing] = useState(false);
+
+  const createOrder = async (data, actions) => {
+    setProcessing(true);
+    
+    try {
+      // Store payment data in session for success page
+      const paymentData = {
+        ...formData,
+        amount: parseFloat(formData.amount),
+        method: 'paypal',
+        date: new Date().toISOString()
+      };
+      
+      sessionStorage.setItem('pendingPayPalPayment', JSON.stringify(paymentData));
+      
+      const result = await paypalService.createOrder(paymentData);
+      
+      if (result.success) {
+        return result.orderId;
+      } else {
+        throw new Error(result.error || 'Failed to create PayPal order');
+      }
+    } catch (error) {
+      toast.error(error.message || 'PayPal order creation failed');
+      setProcessing(false);
+      throw error;
+    }
+  };
+
+  const onApprove = async (data, actions) => {
+    try {
+      // Redirect to success page - payment will be captured there
+      window.location.href = `/paypal/success?token=${data.orderID}&PayerID=${data.payerID}`;
+    } catch (error) {
+      toast.error('Payment approval failed');
+      setProcessing(false);
+    }
+  };
+
+  const onError = (error) => {
+    console.error('PayPal error:', error);
+    toast.error('PayPal payment failed');
+    setProcessing(false);
+    
+    // Redirect to error page
+    window.location.href = `/paypal/error?error=PAYMENT_ERROR&error_description=${encodeURIComponent(error.message || 'Unknown error')}`;
+  };
+
+const onCancelPayment = (data) => {
+    toast.info('PayPal payment was cancelled');
+    setProcessing(false);
+    
+    // Clean up session storage
+    sessionStorage.removeItem('pendingPayPalPayment');
+    
+    // Redirect to error page
+    window.location.href = '/paypal/error?error=CANCELLED';
+  };
+  return (
+    <div className="space-y-6">
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+        <div className="flex items-center mb-2">
+          <ApperIcon name="Shield" className="text-blue-600 mr-2" size={20} />
+          <h4 className="font-medium text-blue-900">Secure PayPal Payment</h4>
+        </div>
+        <p className="text-blue-700 text-sm">You'll be redirected to PayPal to complete your payment securely.</p>
+      </div>
+
+      {selectedInvoice && (
+        <div className="bg-surface-50 p-4 rounded-lg">
+          <h4 className="font-medium text-surface-900 mb-2">Payment Details</h4>
+          <div className="grid grid-cols-2 gap-4 text-sm">
+            <div>
+              <span className="text-surface-600">Amount:</span>
+              <span className="font-medium ml-2">${parseFloat(formData.amount).toFixed(2)}</span>
+            </div>
+            <div>
+              <span className="text-surface-600">Invoice:</span>
+              <span className="ml-2">#{selectedInvoice.id.slice(-6)}</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="space-y-4">
+        <PayPalButtons
+          style={{
+            layout: 'vertical',
+            color: 'blue',
+            shape: 'rect',
+            label: 'paypal'
+          }}
+createOrder={createOrder}
+          onApprove={onApprove}
+          onError={onError}
+          onCancel={onCancelPayment}
+          disabled={processing || !formData.amount || !selectedInvoice}
+        />
+        
+        {processing && (
+          <div className="flex items-center justify-center py-4">
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary mr-3"></div>
+            <span className="text-surface-600">Creating PayPal order...</span>
+          </div>
+        )}
+      </div>
+
+      <div className="flex justify-end space-x-3 pt-4">
+        <Button
+          type="button"
+          onClick={onCancel}
+          disabled={processing}
+          className="px-4 py-2 text-surface-700 border border-surface-300 rounded-lg hover:bg-surface-50 transition-colors disabled:opacity-50"
+        >
+          Cancel
+        </Button>
+      </div>
+    </div>
+  );
+};
+
 const PaymentForm = ({ payment, onSave, onCancel }) => {
   const [formData, setFormData] = useState({
     invoiceId: payment?.invoiceId || '',
@@ -185,6 +318,8 @@ const PaymentForm = ({ payment, onSave, onCancel }) => {
 const [invoices, setInvoices] = useState([]);
   const [selectedInvoice, setSelectedInvoice] = useState(null);
   const [showStripeForm, setShowStripeForm] = useState(false);
+  const [showPayPalForm, setShowPayPalForm] = useState(false);
+
   useEffect(() => {
     const loadInvoices = async () => {
       try {
@@ -213,14 +348,19 @@ const [invoices, setInvoices] = useState([]);
     });
 };
 
-  const handleMethodChange = (method) => {
+const handleMethodChange = (method) => {
     setFormData({ ...formData, method });
     setShowStripeForm(method === 'stripe');
+    setShowPayPalForm(method === 'paypal');
   };
-
-  const handleStripePaymentSuccess = () => {
+const handleStripePaymentSuccess = () => {
     onSave();
   };
+
+  const handlePayPalPaymentSuccess = () => {
+    onSave();
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -258,8 +398,7 @@ const [invoices, setInvoices] = useState([]);
       toast.error('Failed to save payment');
     }
 };
-
-  // If showing Stripe form, render it in Elements provider
+// If showing Stripe form, render it in Elements provider
   if (showStripeForm) {
     return (
       <motion.div
@@ -295,6 +434,44 @@ const [invoices, setInvoices] = useState([]);
       </motion.div>
     );
   }
+
+  // If showing PayPal form, render it in PayPal provider
+  if (showPayPalForm) {
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+      >
+        <motion.div
+          initial={{ scale: 0.95 }}
+          animate={{ scale: 1 }}
+          exit={{ scale: 0.95 }}
+          className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+        >
+          <div className="p-6 border-b border-surface-200">
+            <h2 className="text-xl font-semibold text-surface-900">
+              Process PayPal Payment
+            </h2>
+          </div>
+          
+          <div className="p-6">
+            <PayPalScriptProvider options={paypalOptions}>
+              <PayPalCheckoutForm
+                formData={formData}
+                selectedInvoice={selectedInvoice}
+                onPaymentSuccess={handlePayPalPaymentSuccess}
+                onCancel={() => setShowPayPalForm(false)}
+                payment={payment}
+              />
+            </PayPalScriptProvider>
+          </div>
+        </motion.div>
+      </motion.div>
+    );
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -405,8 +582,21 @@ value={formData.reference}
                 </div>
               </div>
             </div>
-          )}
+)}
 
+          {formData.method === 'paypal' && (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="flex items-center">
+                <ApperIcon name="Info" className="text-blue-600 mr-2" size={20} />
+                <div>
+                  <h4 className="font-medium text-blue-800">PayPal Payment Processing</h4>
+                  <p className="text-blue-700 text-sm mt-1">
+                    Click "Process with PayPal" to continue with secure PayPal payment.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
           <div className="flex justify-end space-x-3 pt-4">
             <Button
               type="button"
@@ -415,7 +605,7 @@ value={formData.reference}
             >
               Cancel
             </Button>
-            {formData.method === 'stripe' ? (
+{formData.method === 'stripe' ? (
               <Button
                 type="button"
                 onClick={() => {
@@ -429,6 +619,21 @@ value={formData.reference}
               >
                 <ApperIcon name="CreditCard" size={16} className="mr-2" />
                 Process with Stripe
+              </Button>
+            ) : formData.method === 'paypal' ? (
+              <Button
+                type="button"
+                onClick={() => {
+                  if (!formData.invoiceId || !formData.amount) {
+                    toast.error('Please select an invoice and enter amount');
+                    return;
+                  }
+                  setShowPayPalForm(true);
+                }}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center"
+              >
+                <ApperIcon name="CreditCard" size={16} className="mr-2" />
+                Process with PayPal
               </Button>
             ) : (
               <Button

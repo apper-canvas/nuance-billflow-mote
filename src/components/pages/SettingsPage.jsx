@@ -1,21 +1,22 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import Panel from '@/components/atoms/Panel';
 import CompanySettingsSection from '@/components/organisms/CompanySettingsSection';
 import TaxSettingsSection from '@/components/organisms/TaxSettingsSection';
 import InvoiceSettingsSection from '@/components/organisms/InvoiceSettingsSection';
 import NotificationSettingsSection from '@/components/organisms/NotificationSettingsSection';
+import PayPalSettingsSection from '@/components/organisms/PayPalSettingsSection';
 
 const SettingsPage = () => {
-  const [companySettings, setCompanySettings] = useState({
-    name: 'BillFlow Pro',
-    email: 'billing@billflowpro.com',
-    phone: '+1 (555) 123-4567',
-    address: '123 Business Street, Suite 100',
-    city: 'San Francisco',
-    state: 'CA',
-    zipCode: '94105',
-    country: 'United States'
-  });
+  const [activeTab, setActiveTab] = useState('company');
+
+  const tabs = [
+    { id: 'company', label: 'Company', icon: 'Building' },
+{ id: 'tax', label: 'Tax Settings', icon: 'Calculator' },
+    { id: 'invoice', label: 'Invoice Settings', icon: 'FileText' },
+    { id: 'payments', label: 'Payment Methods', icon: 'CreditCard' },
+    { id: 'notifications', label: 'Notifications', icon: 'Bell' }
+  ];
 
   const [taxSettings, setTaxSettings] = useState({
     defaultTaxRate: 0.08,
@@ -36,6 +37,14 @@ const SettingsPage = () => {
     invoiceReminders: true,
     paymentConfirmations: true,
     overdueNotices: true
+});
+
+  const [companySettings, setCompanySettings] = useState({
+    companyName: '',
+    address: '',
+    email: '',
+    phone: '',
+    website: ''
   });
 
   return (
@@ -66,6 +75,7 @@ const SettingsPage = () => {
           settings={notificationSettings} 
           onSettingsChange={setNotificationSettings} 
         />
+        <PayPalSettingsSection />
       </div>
     </motion.div>
   );

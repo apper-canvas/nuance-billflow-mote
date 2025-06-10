@@ -1,0 +1,106 @@
+[
+  {
+    "id": "cn_001",
+    "creditNoteNumber": "CN-2024-001",
+    "customerId": "cust_001",
+    "customerName": "Acme Corporation",
+    "invoiceId": "inv_001",
+    "invoiceNumber": "INV-2024-001",
+    "creditNoteDate": "2024-01-15",
+    "reason": "Refund",
+    "amount": 250.00,
+    "description": "Partial refund for defective products in original order",
+    "status": "Applied",
+    "attachments": [],
+    "appliedToInvoice": true,
+    "createdBy": "admin",
+    "createdAt": "2024-01-15T10:30:00Z",
+    "updatedAt": "2024-01-15T10:30:00Z"
+  },
+  {
+    "id": "cn_002",
+    "creditNoteNumber": "CN-2024-002",
+    "customerId": "cust_002",
+    "customerName": "Global Tech Solutions",
+    "invoiceId": "inv_003",
+    "invoiceNumber": "INV-2024-003",
+    "creditNoteDate": "2024-01-20",
+    "reason": "Adjustment",
+    "amount": 150.00,
+    "description": "Price adjustment due to volume discount qualification",
+    "status": "Open",
+    "attachments": [
+      {
+        "id": "att_001",
+        "name": "adjustment_approval.pdf",
+        "type": "application/pdf",
+        "size": 45600
+      }
+    ],
+    "appliedToInvoice": false,
+    "createdBy": "manager",
+    "createdAt": "2024-01-20T14:15:00Z",
+    "updatedAt": "2024-01-20T14:15:00Z"
+  },
+  {
+    "id": "cn_003",
+    "creditNoteNumber": "CN-2024-003",
+    "customerId": "cust_003",
+    "customerName": "Innovation Labs Inc",
+    "invoiceId": "inv_005",
+    "invoiceNumber": "INV-2024-005",
+    "creditNoteDate": "2024-02-01",
+    "reason": "Discount",
+    "amount": 300.00,
+    "description": "Additional discount for early payment and loyalty customer",
+    "status": "Applied",
+    "attachments": [],
+    "appliedToInvoice": true,
+    "createdBy": "sales",
+    "createdAt": "2024-02-01T09:45:00Z",
+    "updatedAt": "2024-02-01T09:45:00Z"
+  },
+  {
+    "id": "cn_004",
+    "creditNoteNumber": "CN-2024-004",
+    "customerId": "cust_004",
+    "customerName": "Digital Marketing Pro",
+    "invoiceId": "inv_007",
+    "invoiceNumber": "INV-2024-007",
+    "creditNoteDate": "2024-02-10",
+    "reason": "Refund",
+    "amount": 500.00,
+    "description": "Full refund for cancelled services due to client request",
+    "status": "Voided",
+    "attachments": [
+      {
+        "id": "att_002",
+        "name": "cancellation_request.pdf",
+        "type": "application/pdf",
+        "size": 32400
+      }
+    ],
+    "appliedToInvoice": false,
+    "createdBy": "admin",
+    "createdAt": "2024-02-10T16:20:00Z",
+    "updatedAt": "2024-02-12T11:30:00Z"
+  },
+  {
+    "id": "cn_005",
+    "creditNoteNumber": "CN-2024-005",
+    "customerId": "cust_005",
+    "customerName": "StartupBoost LLC",
+    "invoiceId": "inv_008",
+    "invoiceNumber": "INV-2024-008",
+    "creditNoteDate": "2024-02-15",
+    "reason": "Adjustment",
+    "amount": 75.00,
+    "description": "Adjustment for billing error in software licensing fees",
+    "status": "Open",
+    "attachments": [],
+    "appliedToInvoice": false,
+    "createdBy": "billing",
+    "createdAt": "2024-02-15T13:10:00Z",
+    "updatedAt": "2024-02-15T13:10:00Z"
+  }
+]

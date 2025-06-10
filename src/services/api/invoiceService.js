@@ -30,7 +30,7 @@ const invoiceService = {
     return { ...newInvoice };
   },
 
-  async update(id, invoiceData) {
+async update(id, invoiceData) {
     await delay(400);
     const index = invoices.findIndex(i => i.id === id);
     if (index === -1) {
@@ -55,6 +55,34 @@ const invoiceService = {
     
     invoices.splice(index, 1);
     return { success: true };
+  },
+
+  async applyCreditNote(id, creditNoteAmount, creditNoteId) {
+    await delay(400);
+    const index = invoices.findIndex(i => i.id === id);
+    if (index === -1) {
+      throw new Error('Invoice not found');
+    }
+    
+    const invoice = invoices[index];
+    const currentAmountDue = invoice.amountDue || invoice.total;
+    const newAmountDue = Math.max(0, currentAmountDue - creditNoteAmount);
+    
+    invoices[index] = {
+      ...invoice,
+      amountDue: newAmountDue,
+      creditNotesApplied: [
+        ...(invoice.creditNotesApplied || []),
+        {
+          creditNoteId,
+          amount: creditNoteAmount,
+          appliedAt: new Date().toISOString()
+        }
+      ],
+      updatedAt: new Date().toISOString()
+    };
+    
+    return { ...invoices[index] };
   }
 };
 

@@ -10,7 +10,7 @@ function App() {
     <BrowserRouter>
       <div className="h-screen flex flex-col overflow-hidden">
         <Routes>
-          <Route path="/" element={<Layout />}>
+<Route path="/" element={<Layout />}>
             <Route index element={<Navigate to="/dashboard" replace />} />
             {routeArray.map((route) => (
               <Route

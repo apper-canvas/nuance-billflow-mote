@@ -5,6 +5,7 @@ import productService from './api/productService';
 import subscriptionService from './api/subscriptionService';
 import stripeService from './api/stripeService';
 import paypalService from './api/paypalService';
+import creditNoteService from './api/creditNoteService';
 
 export {
   customerService,
@@ -13,5 +14,6 @@ export {
   productService,
 subscriptionService,
   stripeService,
-  paypalService
+  paypalService,
+  creditNoteService
 };

@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import MetricCard from '@/components/molecules/MetricCard';
 import QuickActionCard from '@/components/molecules/QuickActionCard';
 import RecentActivityList from '@/components/organisms/RecentActivityList';
+import CustomerForm from '@/components/organisms/CustomerForm';
 import { customerService, subscriptionService, invoiceService } from '@/services';
-
 const DashboardOverview = () => {
+  const navigate = useNavigate();
   const [metrics, setMetrics] = useState({
     mrr: 0,
     activeSubscriptions: 0,
@@ -15,76 +17,86 @@ const DashboardOverview = () => {
   });
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showCustomerForm, setShowCustomerForm] = useState(false);
+const loadDashboardData = async () => {
+    setLoading(true);
+    try {
+      const [customers, subscriptions, invoices] = await Promise.all([
+        customerService.getAll(),
+        subscriptionService.getAll(),
+        invoiceService.getAll()
+      ]);
+
+      // Calculate MRR from active subscriptions
+      const activeSubs = subscriptions.filter(sub => sub.status === 'active');
+      const mrr = activeSubs.reduce((total, sub) => {
+        const monthlyAmount = sub.billingCycle === 'yearly' ? sub.amount / 12 : sub.amount;
+        return total + monthlyAmount;
+      }, 0);
+
+      // Calculate pending payments
+      const pendingInvoices = invoices.filter(inv => inv.status === 'pending');
+      const pendingPayments = pendingInvoices.reduce((total, inv) => total + inv.total, 0);
+
+      setMetrics({
+        mrr: mrr,
+        activeSubscriptions: activeSubs.length,
+        pendingPayments: pendingPayments,
+        totalCustomers: customers.length
+      });
+
+      // Generate recent activities
+      const recentActivities = [
+        {
+          message: `${customers.length} customers registered`,
+          time: '2 hours ago',
+          icon: 'UserPlus',
+          color: 'primary'
+        },
+        {
+          message: `${activeSubs.length} active subscriptions`,
+          time: '4 hours ago',
+          icon: 'Repeat',
+          color: 'accent'
+        },
+        {
+          message: `${pendingInvoices.length} invoices pending`,
+          time: '6 hours ago',
+          icon: 'FileText',
+          color: 'secondary'
+        }
+      ];
+
+      setActivities(recentActivities);
+    } catch (error) {
+      toast.error('Failed to load dashboard data');
+      console.error('Dashboard load error:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const loadDashboardData = async () => {
-      setLoading(true);
-      try {
-        const [customers, subscriptions, invoices] = await Promise.all([
-          customerService.getAll(),
-          subscriptionService.getAll(),
-          invoiceService.getAll()
-        ]);
-
-        // Calculate MRR from active subscriptions
-        const activeSubs = subscriptions.filter(sub => sub.status === 'active');
-        const mrr = activeSubs.reduce((total, sub) => {
-          const monthlyAmount = sub.billingCycle === 'yearly' ? sub.amount / 12 : sub.amount;
-          return total + monthlyAmount;
-        }, 0);
-
-        // Calculate pending payments
-        const pendingInvoices = invoices.filter(inv => inv.status === 'pending');
-        const pendingPayments = pendingInvoices.reduce((total, inv) => total + inv.total, 0);
-
-        setMetrics({
-          mrr: mrr,
-          activeSubscriptions: activeSubs.length,
-          pendingPayments: pendingPayments,
-          totalCustomers: customers.length
-        });
-
-        // Generate recent activities
-        const recentActivities = [
-          {
-            message: `${customers.length} customers registered`,
-            time: '2 hours ago',
-            icon: 'UserPlus',
-            color: 'primary'
-          },
-          {
-            message: `${activeSubs.length} active subscriptions`,
-            time: '4 hours ago',
-            icon: 'Repeat',
-            color: 'accent'
-          },
-          {
-            message: `${pendingInvoices.length} invoices pending`,
-            time: '6 hours ago',
-            icon: 'FileText',
-            color: 'secondary'
-          }
-        ];
-
-        setActivities(recentActivities);
-      } catch (error) {
-        toast.error('Failed to load dashboard data');
-        console.error('Dashboard load error:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     loadDashboardData();
   }, []);
 
-  const quickActions = [
+  const handleCustomerFormSave = () => {
+    setShowCustomerForm(false);
+    loadDashboardData(); // Refresh dashboard data after customer creation
+    toast.success('Customer created successfully!');
+  };
+
+  const handleCustomerFormCancel = () => {
+    setShowCustomerForm(false);
+  };
+
+const quickActions = [
     {
       title: 'Add Customer',
       description: 'Create a new customer profile',
       icon: 'UserPlus',
       color: 'primary',
-      onClick: () => toast.info('Navigate to Customers page to add new customer')
+      onClick: () => setShowCustomerForm(true)
     },
     {
       title: 'Create Invoice',
@@ -186,8 +198,18 @@ const DashboardOverview = () => {
         
         <div>
           <RecentActivityList activities={activities} />
-        </div>
+</div>
       </div>
+
+      <AnimatePresence>
+        {showCustomerForm && (
+          <CustomerForm
+            customer={null}
+            onSave={handleCustomerFormSave}
+            onCancel={handleCustomerFormCancel}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 };

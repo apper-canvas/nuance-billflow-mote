@@ -1,0 +1,83 @@
+[
+  {
+    "id": "1",
+    "name": "Business Plan",
+    "description": "Comprehensive business management solution with advanced features",
+    "pricing": [
+      {
+        "amount": 99.99,
+        "billingCycle": "monthly"
+      },
+      {
+        "amount": 999.99,
+        "billingCycle": "yearly"
+      }
+    ],
+    "taxable": true,
+    "createdAt": "2024-01-10T08:00:00.000Z"
+  },
+  {
+    "id": "2",
+    "name": "Pro Plan",
+    "description": "Professional-grade tools for growing businesses",
+    "pricing": [
+      {
+        "amount": 49.99,
+        "billingCycle": "monthly"
+      },
+      {
+        "amount": 499.99,
+        "billingCycle": "yearly"
+      }
+    ],
+    "taxable": true,
+    "createdAt": "2024-01-10T08:15:00.000Z"
+  },
+  {
+    "id": "3",
+    "name": "Starter Plan",
+    "description": "Essential features for small businesses and startups",
+    "pricing": [
+      {
+        "amount": 19.99,
+        "billingCycle": "monthly"
+      },
+      {
+        "amount": 199.99,
+        "billingCycle": "yearly"
+      }
+    ],
+    "taxable": true,
+    "createdAt": "2024-01-10T08:30:00.000Z"
+  },
+  {
+    "id": "4",
+    "name": "Setup & Onboarding",
+    "description": "One-time setup and onboarding service for new customers",
+    "pricing": [
+      {
+        "amount": 299.99,
+        "billingCycle": "one-time"
+      }
+    ],
+    "taxable": false,
+    "createdAt": "2024-01-15T10:00:00.000Z"
+  },
+  {
+    "id": "5",
+    "name": "Premium Support",
+    "description": "24/7 priority support with dedicated account manager",
+    "pricing": [
+      {
+        "amount": 149.99,
+        "billingCycle": "monthly"
+      },
+      {
+        "amount": 399.99,
+        "billingCycle": "quarterly"
+      }
+    ],
+    "taxable": true,
+    "createdAt": "2024-01-20T12:00:00.000Z"
+  }
+]

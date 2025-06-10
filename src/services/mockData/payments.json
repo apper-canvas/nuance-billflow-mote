@@ -1,0 +1,42 @@
+[
+  {
+    "id": "1",
+    "invoiceId": "1",
+    "amount": 107.99,
+    "method": "credit_card",
+    "status": "completed",
+    "date": "2024-02-28T16:30:00.000Z",
+    "reference": "ch_1234567890abcdef",
+    "createdAt": "2024-02-28T16:30:00.000Z"
+  },
+  {
+    "id": "2",
+    "invoiceId": "3",
+    "amount": 1403.98,
+    "method": "bank_transfer",
+    "status": "completed",
+    "date": "2024-01-30T10:15:00.000Z",
+    "reference": "ACH-789456123",
+    "createdAt": "2024-01-30T10:15:00.000Z"
+  },
+  {
+    "id": "3",
+    "invoiceId": "2",
+    "amount": 25.00,
+    "method": "credit_card",
+    "status": "completed",
+    "date": "2024-02-20T14:22:00.000Z",
+    "reference": "ch_0987654321fedcba",
+    "createdAt": "2024-02-20T14:22:00.000Z"
+  },
+  {
+    "id": "4",
+    "invoiceId": "5",
+    "amount": 200.00,
+    "method": "check",
+    "status": "completed",
+    "date": "2024-01-15T09:00:00.000Z",
+    "reference": "CHECK-001234",
+    "createdAt": "2024-01-15T09:00:00.000Z"
+  }
+]

@@ -1,0 +1,57 @@
+[
+  {
+    "id": "1",
+    "customerId": "1",
+    "productId": "1",
+    "status": "active",
+    "startDate": "2024-02-01T00:00:00.000Z",
+    "nextBillingDate": "2024-03-01T00:00:00.000Z",
+    "amount": 99.99,
+    "billingCycle": "monthly",
+    "createdAt": "2024-01-28T15:30:00.000Z"
+  },
+  {
+    "id": "2",
+    "customerId": "2",
+    "productId": "2",
+    "status": "active",
+    "startDate": "2024-02-15T00:00:00.000Z",
+    "nextBillingDate": "2024-03-15T00:00:00.000Z",
+    "amount": 49.99,
+    "billingCycle": "monthly",
+    "createdAt": "2024-02-12T10:20:00.000Z"
+  },
+  {
+    "id": "3",
+    "customerId": "3",
+    "productId": "1",
+    "status": "active",
+    "startDate": "2024-01-01T00:00:00.000Z",
+    "nextBillingDate": "2025-01-01T00:00:00.000Z",
+    "amount": 999.99,
+    "billingCycle": "yearly",
+    "createdAt": "2023-12-28T14:45:00.000Z"
+  },
+  {
+    "id": "4",
+    "customerId": "4",
+    "productId": "3",
+    "status": "active",
+    "startDate": "2024-03-01T00:00:00.000Z",
+    "nextBillingDate": "2024-04-01T00:00:00.000Z",
+    "amount": 19.99,
+    "billingCycle": "monthly",
+    "createdAt": "2024-02-26T09:15:00.000Z"
+  },
+  {
+    "id": "5",
+    "customerId": "5",
+    "productId": "5",
+    "status": "paused",
+    "startDate": "2024-02-01T00:00:00.000Z",
+    "nextBillingDate": "2024-05-01T00:00:00.000Z",
+    "amount": 399.99,
+    "billingCycle": "quarterly",
+    "createdAt": "2024-01-30T16:00:00.000Z"
+  }
+]
